@@ -41,6 +41,7 @@ function draw_grid(ctx, minor, major, stroke, fill) {
 
 function draw_tab(ctx, options) {
 	options = options || {};
+	ctx.save();
 	// Draw 6 lines across the page
 
 	// Line spacing 
@@ -53,6 +54,9 @@ function draw_tab(ctx, options) {
 	// Default variables that are not provided
 	stroke = options.stroke || 'rgba(0,0,0,1)';
 	fill = options.fill || 'rgba(0,0,0,1)';
+
+	textSize = options.textSize || 25;
+	textAlign = options.align || 'center';
 
 	// Set context values
 	ctx.strokeStyle = stroke;
@@ -88,9 +92,16 @@ function draw_tab(ctx, options) {
 		ctx.lineWidth = 5;
 		ctx.stroke();
 
+		// Write "TAB" down the left side
+		ctx.fillStyle = fill;
+		ctx.textAlign = textAlign;
+		ctx.font = textSize + "pt Arial";
+		ctx.fillText("T", 0+textSize/2, staffTop + textSize);
+		ctx.fillText("A", 0+textSize/2, staffTop + textSize * 2.5);
+		ctx.fillText("B", 0+textSize/2, staffTop + textSize * 4);
 
 		if (options.guide) {
-			//ctx.strokeStyle = "red";
+			//ctx.strokeStyle = "red"0
 			//ctx.fillStyle = "rgba(255,0,0,0.25)";
 			//ctx.lineWidth = .5;
 			//ctx.beginPath();
@@ -99,6 +110,7 @@ function draw_tab(ctx, options) {
 			//ctx.fill();
 		}
 	}
+	ctx.restore();
 }
 
 
