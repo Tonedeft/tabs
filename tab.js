@@ -10,15 +10,19 @@ class Tab {
 		this.canvas.width = window.innerWidth*.9;
 		this.canvas.height = window.innerHeight*.9;
 
-		this.linesPerStaff = 6;
 
+		this.options = {};
+		this.options.linesPerStaff = 6;
+		this.options.startingX = 50;
+		this.options.lineSpacing = 20;
+		this.options.staffSpacing = 40;
+		this.options.linesPerStaff = 6;
 
 		// Initialize the state
 		this.state = {
 			"keys" : {},
 			"clicks" : {},
 			"mouse": {},
-			"objects": [],
 		}
 
 		// Grid of notes: staff index, x (horizontal), y (which string, 0-5)
@@ -27,7 +31,8 @@ class Tab {
 			this.staves.push([]);
 			for (var string = 0; string < 6; ++string) {
 				this.staves[staff].push([]);
-				for (var x = 0; x < 20; ++x) {
+				for (var x = 0; x < 50; ++x) { // TODO: How to keep track of max horizontal location?
+					// TODO: This creates a bunch of objects that may be empty, there's a better way I think
 					this.staves[staff][string].push(new Note({staffIndex:staff, x:x, y:string}, ""));
 				}
 			}
@@ -40,11 +45,8 @@ class Tab {
 			y: 0
 		};
 
-		// Add our objects
-
 		// Add Event Listeners
 		this.addEventListenerTo(window);
-		//this.canvas.addEventListener("keydown", this.keyDown.bind(this), true);
 
 		requestAnimationFrame(this.frame.bind(this));
 	}
@@ -100,6 +102,7 @@ class Tab {
 			this.state.keys["Backspace"] = false;
 			this.state.keys["Delete"] = false;
 		}
+		// TODO: I really did this... I can make this cleaner
 		if (this.state.keys["0"] == true)
 		{
 			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "0";
@@ -160,6 +163,12 @@ class Tab {
 
 			this.state.keys["9"] = false;
 		}
+		if (this.state.keys["x"] == true)
+		{
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "x";
+
+			this.state.keys["x"] = false;
+		}
 	}
 
 	keyDown(e) {
@@ -214,10 +223,6 @@ class Tab {
 
 
 	update(elapsed) {
-		this.state.objects.forEach((object) => {
-			//console.log(object);
-			//object.update(this.state, elapsed);
-		});
 
 	}
 
@@ -225,22 +230,23 @@ class Tab {
 	draw() {
 		//draw_grid(this.c);
 		this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		draw_tab(this.c,  {guide: this.guide});
 
-		draw_tab_cursor(this.c, this.cursor, {guide: this.guide});
+		// Draw the staves
+		draw_tab(this.c,  this.options);
 
-		this.state.objects.forEach((object) => {
-			//console.log(object);
-			object.draw(this.c, {});
-		});
+
+		// Draw the notes on the staff (3 dimensional for loop, can this be cleaner?)
 		this.staves.forEach((staff) => {
 			//console.log(object);
 			staff.forEach((string) => {
 				string.forEach((note) => {
-					note.draw(this.c, {});
+					note.draw(this.c, this.options);
 				})
 			})
 		});
+		
+		// Draw the cursor
+		draw_tab_cursor(this.c, this.cursor, this.options);
 	}
 
 	addEventListenerTo(element) {
@@ -254,14 +260,6 @@ class Tab {
 
 	addObject(object) {
 		this.state.objects.push(object);
-		this.stage.addChild(object.sprite);
 	}
 
 }
-
-// animate() works a lot like frame() from the other book.
-// We could probably use that instead.
-//PlatformerDemo.prototype.animate = function() {
-//	requestAnimationFrame(this.animate.bind(this));
-//
-//}

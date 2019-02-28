@@ -128,6 +128,9 @@ function draw_tab_cursor(ctx, cursor, options) {
 	linesPerStaff = options.linesPerStaff || 6;
 	// Cursor width
 	cursorWidth = options.cursorWidth || 15;
+	// Starting x location
+	startingX = options.startingX || 60;
+
 
 	staffIndex = cursor.staffIndex;
 	x = cursor.x;
@@ -150,12 +153,12 @@ function draw_tab_cursor(ctx, cursor, options) {
 	// Draw the larger cursor guide, surrounding all lines of the staff
 	ctx.lineWidth = .5;
 	ctx.beginPath();
-	ctx.rect(cursorWidth*x, staffTop, cursorWidth, lineSpacing * (linesPerStaff)); // left, top, width, height
+	ctx.rect(startingX+cursorWidth*x, staffTop, cursorWidth, lineSpacing * (linesPerStaff)); // left, top, width, height
 	ctx.stroke();
 
 	// Fill the smaller, real cursor location
 	ctx.beginPath();
-	ctx.rect(cursorWidth*x, staffTop+y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
+	ctx.rect(startingX+cursorWidth*x, staffTop+y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
 	ctx.stroke();
 	ctx.fill();
 

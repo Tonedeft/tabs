@@ -10,38 +10,50 @@ class Note {
 	draw(ctx, options) {
 		if (this.value != "")
 		{
-			options = options || {};
+			var options = options || {};
 			ctx.save();
 			// Draw 6 lines across the page
 
 			// Line spacing 
-			lineSpacing = options.lineSpacing || 20;
+			var lineSpacing = options.lineSpacing || 20;
 			// Staff spacing
-			staffSpacing = options.staffSpacing || 40;
+			var staffSpacing = options.staffSpacing || 40;
 			// Lines per staff
-			linesPerStaff = options.linesPerStaff || 6;
+			var linesPerStaff = options.linesPerStaff || 6;
+			// Starting x location
+			var startingX = options.startingX || 60;
 
 			// Default variables that are not provided
-			stroke = options.stroke || 'rgba(0,0,0,1)';
-			fill = options.fill || 'rgba(0,0,0,1)';
+			var stroke = options.stroke || 'rgba(0,0,0,1)';
+			var textColor = options.textColor || 'rgba(0,0,0,1)';
+			var backgroundColor = options.textColor || 'rgba(255,255,255,1)';
 
-			textSize = options.textSize || 15;
-			textAlign = options.align || 'center';
+			var textSize = options.textSize || 15;
+			var textAlign = options.align || 'center';
 
 			// Set context values
 			ctx.strokeStyle = stroke;
-			ctx.fillStyle = fill;
+			ctx.fillStyle = textColor;
 			let width = ctx.canvas.width, height = ctx.canvas.height;
 
 			// Get the staff details
 			var staffTop = staffSpacing + this.staffIndex * ((linesPerStaff) * lineSpacing + staffSpacing) - .5 * lineSpacing;
 
 			// Get location of cursor
-			var textX = cursorWidth*this.x+(textSize+lineSpacing)/4;
+			var textX = startingX+cursorWidth*this.x+(textSize+lineSpacing)/4;
 			var textY = staffTop+this.y*lineSpacing + (textSize+lineSpacing)/2;
 
+			// Draw the background
+			// Fill the smaller, real cursor location
+			ctx.beginPath();
+			ctx.fillStyle = backgroundColor;
+			ctx.rect(startingX+cursorWidth*this.x, staffTop+this.y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
+			//ctx.stroke();
+			ctx.fill();
 
-			ctx.fillStyle = fill;
+
+			// Write the value
+			ctx.fillStyle = textColor;
 			ctx.textAlign = textAlign;
 			ctx.font = textSize + "pt Arial";
 			ctx.fillText(this.value, textX, textY);
