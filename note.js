@@ -16,6 +16,8 @@ class Note {
 
 			// Line spacing 
 			var lineSpacing = options.lineSpacing || 20;
+			// Horizontal spacing 
+			var horizontalSpacing = options.horizontalSpacing || 20;
 			// Staff spacing
 			var staffSpacing = options.staffSpacing || 40;
 			// Lines per staff
@@ -40,14 +42,14 @@ class Note {
 			var staffTop = staffSpacing + this.staffIndex * ((linesPerStaff) * lineSpacing + staffSpacing) - .5 * lineSpacing;
 
 			// Get location of cursor
-			var textX = startingX+cursorWidth*this.x+(textSize+lineSpacing)/4;
+			var textX = startingX+(cursorWidth+horizontalSpacing)*this.x+(textSize+lineSpacing)/4;
 			var textY = staffTop+this.y*lineSpacing + (textSize+lineSpacing)/2;
 
 			// Draw the background
 			// Fill the smaller, real cursor location
 			ctx.beginPath();
 			ctx.fillStyle = backgroundColor;
-			ctx.rect(startingX+cursorWidth*this.x, staffTop+this.y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
+			ctx.rect(startingX+(cursorWidth+horizontalSpacing)*this.x, staffTop+this.y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
 			//ctx.stroke();
 			ctx.fill();
 

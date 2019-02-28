@@ -15,6 +15,7 @@ class Tab {
 		this.options.linesPerStaff = 6;
 		this.options.startingX = 50;
 		this.options.lineSpacing = 20;
+		this.options.horizontalSpacing = 10;
 		this.options.staffSpacing = 40;
 		this.options.linesPerStaff = 6;
 
@@ -71,7 +72,7 @@ class Tab {
 		{
 			if (this.cursor.y == 0) {
 				if (this.cursor.staffIndex > 0) {
-					this.cursor.y = this.linesPerStaff-1;
+					this.cursor.y = this.options.linesPerStaff-1;
 					this.cursor.staffIndex -= 1;
 				}
 			} else {
@@ -81,7 +82,9 @@ class Tab {
 		}
 		if (this.state.keys["ArrowDown"] == true)
 		{
-			if (this.cursor.y == this.linesPerStaff-1) {
+			console.log(this.cursor);
+			console.log(this.options.linesPerStaff);
+			if (this.cursor.y == this.options.linesPerStaff-1) {
 				if (this.cursor.staffIndex < 8) {  // TODO: Max Staves
 					this.cursor.y = 0;
 					this.cursor.staffIndex += 1;
@@ -244,7 +247,7 @@ class Tab {
 				})
 			})
 		});
-		
+
 		// Draw the cursor
 		draw_tab_cursor(this.c, this.cursor, this.options);
 	}
