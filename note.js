@@ -22,6 +22,8 @@ class Note {
 			var staffSpacing = options.staffSpacing || 40;
 			// Lines per staff
 			var linesPerStaff = options.linesPerStaff || 6;
+			// Cursor width
+			var cursorWidth = options.cursorWidth || 15;
 			// Starting x location
 			var startingX = options.startingX || 60;
 

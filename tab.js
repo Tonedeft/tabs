@@ -1,5 +1,3 @@
-
-
 class Tab {
 	constructor(id) {
 		this.guide = true;
@@ -18,6 +16,7 @@ class Tab {
 		this.options.horizontalSpacing = 10;
 		this.options.staffSpacing = 40;
 		this.options.linesPerStaff = 6;
+		this.options.notesPerLine = 32 + 3; // 4 measures of eighth notes + 3 bars
 
 		// Initialize the state
 		this.state = {
@@ -26,7 +25,10 @@ class Tab {
 			"mouse": {},
 		}
 
+		// Staff contains n measures split into 16 divisions (16th notes)
+
 		// Grid of notes: staff index, x (horizontal), y (which string, 0-5)
+		// We default to 1 staff (that wraps around)
 		this.staves = [];
 		for (var staff = 0; staff < 5; ++staff) {
 			this.staves.push([]);
@@ -40,11 +42,7 @@ class Tab {
 		}
 
 		// Cursor points to a location on those dimensions
-		this.cursor = {
-			staffIndex: 0,
-			x: 0,
-			y: 0
-		};
+		this.current_position = new Cursor(0, 0, 0);
 
 		// Add Event Listeners
 		this.addEventListenerTo(window);
@@ -56,40 +54,22 @@ class Tab {
 		// Move the cursor appropriately
 		if (this.state.keys["ArrowRight"] == true)
 		{
-			if (this.cursor.x < 100) { // TODO: Max lines per staff
-				this.cursor.x += 1;
-			}
+			this.current_position.move(1,0);
 			this.state.keys["ArrowRight"] = false;
 		}
 		if (this.state.keys["ArrowLeft"] == true)
 		{
-			if (this.cursor.x > 0) {
-				this.cursor.x -= 1;
-			}
+			this.current_position.move(-1,0);
 			this.state.keys["ArrowLeft"] = false;
 		}
 		if (this.state.keys["ArrowUp"] == true)
 		{
-			if (this.cursor.y == 0) {
-				if (this.cursor.staffIndex > 0) {
-					this.cursor.y = this.options.linesPerStaff-1;
-					this.cursor.staffIndex -= 1;
-				}
-			} else {
-				this.cursor.y -= 1;
-			}
+			this.current_position.move(0,-1);
 			this.state.keys["ArrowUp"] = false;
 		}
 		if (this.state.keys["ArrowDown"] == true)
 		{
-			if (this.cursor.y == this.options.linesPerStaff-1) {
-				if (this.cursor.staffIndex < 8) {  // TODO: Max Staves
-					this.cursor.y = 0;
-					this.cursor.staffIndex += 1;
-				}
-			} else {
-				this.cursor.y += 1;
-			}
+			this.current_position.move(0,1);
 			this.state.keys["ArrowDown"] = false;
 		}
 
@@ -98,7 +78,7 @@ class Tab {
 			)
 		{
 
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "";
 
 			this.state.keys["Backspace"] = false;
 			this.state.keys["Delete"] = false;
@@ -106,68 +86,68 @@ class Tab {
 		// TODO: I really did this... I can make this cleaner
 		if (this.state.keys["0"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "0";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "0";
 
 			this.state.keys["0"] = false;
 		}
 		if (this.state.keys["1"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "1";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "1";
 
 			this.state.keys["1"] = false;
 		}
 		if (this.state.keys["2"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "2";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "2";
 
 			this.state.keys["2"] = false;
 		}
 		if (this.state.keys["3"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "3";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "3";
 
 			this.state.keys["3"] = false;
 		}
 		if (this.state.keys["4"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "4";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "4";
 
 			this.state.keys["4"] = false;
 		}
 		if (this.state.keys["5"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "5";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "5";
 
 			this.state.keys["5"] = false;
 		}
 		if (this.state.keys["6"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "6";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "6";
 
 			this.state.keys["6"] = false;
 		}
 		if (this.state.keys["7"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "7";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "7";
 
 			this.state.keys["7"] = false;
 		}
 		if (this.state.keys["8"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "8";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "8";
 
 			this.state.keys["8"] = false;
 		}
 		if (this.state.keys["9"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "9";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "9";
 
 			this.state.keys["9"] = false;
 		}
 		// TODO: How do we handle 10-22 or whatever the max can be?
 		if (this.state.keys["x"] == true)
 		{
-			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "x";
+			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "x";
 
 			this.state.keys["x"] = false;
 		}
@@ -204,6 +184,8 @@ class Tab {
 	mouseMove(e) {
 		this.state.mouse.clientX = e.clientX;
 		this.state.mouse.clientY = e.clientY;
+
+		//console.log(e);
 	}
 
 	frame(timestamp) {
@@ -247,8 +229,7 @@ class Tab {
 			})
 		});
 
-		// Draw the cursor
-		draw_tab_cursor(this.c, this.cursor, this.options);
+		this.current_position.draw(this.c, this.options);
 	}
 
 	addEventListenerTo(element) {
