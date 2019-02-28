@@ -82,8 +82,6 @@ class Tab {
 		}
 		if (this.state.keys["ArrowDown"] == true)
 		{
-			console.log(this.cursor);
-			console.log(this.options.linesPerStaff);
 			if (this.cursor.y == this.options.linesPerStaff-1) {
 				if (this.cursor.staffIndex < 8) {  // TODO: Max Staves
 					this.cursor.y = 0;
@@ -166,6 +164,7 @@ class Tab {
 
 			this.state.keys["9"] = false;
 		}
+		// TODO: How do we handle 10-22 or whatever the max can be?
 		if (this.state.keys["x"] == true)
 		{
 			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "x";
