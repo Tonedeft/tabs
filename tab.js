@@ -43,6 +43,7 @@ class Tab {
 
 		// Cursor points to a location on those dimensions
 		this.current_position = new Cursor(0, 0, 0);
+		this.mouse_position = new Cursor(0, 0, 0);
 
 		// Add Event Listeners
 		this.addEventListenerTo(window);
@@ -185,6 +186,8 @@ class Tab {
 		this.state.mouse.clientX = e.clientX;
 		this.state.mouse.clientY = e.clientY;
 
+		this.mouse_position.updateWithPosition(e.clientX, e.clientY, this.options);
+
 		//console.log(e);
 	}
 
@@ -230,6 +233,7 @@ class Tab {
 		});
 
 		this.current_position.draw(this.c, this.options);
+		this.mouse_position.draw(this.c, this.options);
 	}
 
 	addEventListenerTo(element) {

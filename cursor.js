@@ -62,11 +62,6 @@ class Cursor {
 		var linesPerStaff = options.linesPerStaff || 6;
 
 		this.x += x;
-		//this.y += y;
-
-		// Have we hit the bottom?
-		  // Where do we jump to?
-		// Have we hit the top?
 		if (this.y == 0 && y < 0) {
 			if (this.x < notesPerLine) {
 				// Do nothing, we're on top staff
@@ -82,8 +77,48 @@ class Cursor {
 		} else {
 			this.y += y;
 		}
-		  // Where do we jump to?
-		// Have we hit the far left/far right?
 		if (this.x < 0) this.x = 0;
+	}
+
+	updateWithPosition(x, y, options)
+	{
+		var options = options || {};
+		// Line spacing 
+		var lineSpacing = options.lineSpacing || 20;
+		// Horizontal spacing 
+		var horizontalSpacing = options.horizontalSpacing || 20;
+		// Staff spacing
+		var staffSpacing = options.staffSpacing || 40;
+		// Lines per staff
+		var linesPerStaff = options.linesPerStaff || 6;
+		// Cursor width
+		var cursorWidth = options.cursorWidth || 15;
+		// Starting x location
+		var startingX = options.startingX || 60;
+		var notesPerLine = options.notesPerLine || (32 + 3);
+		var linesPerStaff = options.linesPerStaff || 6;
+		// Find the staffIndex, x, and y values and move the cursor x, y position
+
+		// Start with y position
+		// Get the staff details
+
+
+		var staffPosition = Math.floor((y - .5*staffSpacing) / ((linesPerStaff * lineSpacing) + staffSpacing));
+		this.x = staffPosition * notesPerLine;
+
+		var xPosition = Math.floor((x - 2*startingX - 0.5*(cursorWidth)) / (cursorWidth + horizontalSpacing));
+		this.x += xPosition;
+
+		//console.log(staffPosition);
+
+		var staffTop = staffSpacing + staffPosition * ((linesPerStaff) * lineSpacing + staffSpacing) - 0.5 * lineSpacing;
+		var staffBottom = staffTop + 6 * lineSpacing;
+
+		if (y > staffTop && y < staffBottom)
+		{
+			//console.log("IN STAFF");
+		}
+
+
 	}
 }
