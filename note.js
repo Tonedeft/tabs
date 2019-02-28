@@ -26,6 +26,8 @@ class Note {
 			var cursorWidth = options.cursorWidth || 15;
 			// Starting x location
 			var startingX = options.startingX || 60;
+			var notesPerLine = options.notesPerLine || (32 + 3);
+			var linesPerStaff = options.linesPerStaff || 6;
 
 			// Default variables that are not provided
 			var stroke = options.stroke || 'rgba(0,0,0,1)';
@@ -40,18 +42,22 @@ class Note {
 			ctx.fillStyle = textColor;
 			let width = ctx.canvas.width, height = ctx.canvas.height;
 
+			var staffIndex = Math.floor(this.x / notesPerLine);
+			var x = this.x % notesPerLine;
+			var y = this.y;
+
 			// Get the staff details
-			var staffTop = staffSpacing + this.staffIndex * ((linesPerStaff) * lineSpacing + staffSpacing) - .5 * lineSpacing;
+			var staffTop = staffSpacing + staffIndex * ((linesPerStaff) * lineSpacing + staffSpacing) - .5 * lineSpacing;
 
 			// Get location of cursor
-			var textX = startingX+(cursorWidth+horizontalSpacing)*this.x+(textSize+lineSpacing)/4;
-			var textY = staffTop+this.y*lineSpacing + (textSize+lineSpacing)/2;
+			var textX = startingX+(cursorWidth+horizontalSpacing)*x+(textSize+lineSpacing)/4;
+			var textY = staffTop+y*lineSpacing + (textSize+lineSpacing)/2;
 
 			// Draw the background
 			// Fill the smaller, real cursor location
 			ctx.beginPath();
 			ctx.fillStyle = backgroundColor;
-			ctx.rect(startingX+(cursorWidth+horizontalSpacing)*this.x, staffTop+this.y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
+			ctx.rect(startingX+(cursorWidth+horizontalSpacing)*x, staffTop+y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
 			//ctx.stroke();
 			ctx.fill();
 
