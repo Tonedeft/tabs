@@ -12,11 +12,6 @@ class Tab {
 
 		this.linesPerStaff = 6;
 
-		this.cursor = {
-			staffIndex: 0,
-			x: 0,
-			y: 0
-		};
 
 		// Initialize the state
 		this.state = {
@@ -27,8 +22,23 @@ class Tab {
 		}
 
 		// Grid of notes: staff index, x (horizontal), y (which string, 0-5)
+		this.staves = [];
+		for (var staff = 0; staff < 5; ++staff) {
+			this.staves.push([]);
+			for (var string = 0; string < 6; ++string) {
+				this.staves[staff].push([]);
+				for (var x = 0; x < 20; ++x) {
+					this.staves[staff][string].push(new Note({staffIndex:staff, x:x, y:string}, ""));
+				}
+			}
+		}
 
 		// Cursor points to a location on those dimensions
+		this.cursor = {
+			staffIndex: 0,
+			x: 0,
+			y: 0
+		};
 
 		// Add our objects
 
@@ -80,73 +90,73 @@ class Tab {
 			this.state.keys["ArrowDown"] = false;
 		}
 
+		if (this.state.keys["Backspace"] == true ||
+			this.state.keys["Delete"] == true 
+			)
+		{
+
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "";
+
+			this.state.keys["Backspace"] = false;
+			this.state.keys["Delete"] = false;
+		}
 		if (this.state.keys["0"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 0));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "0";
 
 			this.state.keys["0"] = false;
 		}
 		if (this.state.keys["1"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 1));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "1";
 
 			this.state.keys["1"] = false;
 		}
 		if (this.state.keys["2"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 2));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "2";
 
 			this.state.keys["2"] = false;
 		}
 		if (this.state.keys["3"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 3));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "3";
 
 			this.state.keys["3"] = false;
 		}
 		if (this.state.keys["4"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 4));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "4";
 
 			this.state.keys["4"] = false;
 		}
 		if (this.state.keys["5"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 5));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "5";
 
 			this.state.keys["5"] = false;
 		}
 		if (this.state.keys["6"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 6));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "6";
 
 			this.state.keys["6"] = false;
 		}
 		if (this.state.keys["7"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 7));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "7";
 
 			this.state.keys["7"] = false;
 		}
 		if (this.state.keys["8"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 8));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "8";
 
 			this.state.keys["8"] = false;
 		}
 		if (this.state.keys["9"] == true)
 		{
-			// Draw the number 2
-			this.state.objects.push(new Note(this.cursor, 9));
+			this.staves[this.cursor.staffIndex][this.cursor.y][this.cursor.x].value = "9";
 
 			this.state.keys["9"] = false;
 		}
@@ -222,6 +232,14 @@ class Tab {
 		this.state.objects.forEach((object) => {
 			//console.log(object);
 			object.draw(this.c, {});
+		});
+		this.staves.forEach((staff) => {
+			//console.log(object);
+			staff.forEach((string) => {
+				string.forEach((note) => {
+					note.draw(this.c, {});
+				})
+			})
 		});
 	}
 
