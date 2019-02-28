@@ -7,8 +7,8 @@ class Tab {
 		this.c = this.canvas.getContext("2d");
 		this.canvas.focus();
 
-		this.canvas.width = window.innerWidth;
-		this.canvas.height = window.innerHeight;
+		this.canvas.width = window.innerWidth*.9;
+		this.canvas.height = window.innerHeight*.9;
 
 		this.linesPerStaff = 6;
 
@@ -27,6 +27,8 @@ class Tab {
 		}
 
 		// Grid of notes: staff index, x (horizontal), y (which string, 0-5)
+
+		// Cursor points to a location on those dimensions
 
 		// Add our objects
 
@@ -156,7 +158,10 @@ class Tab {
 
 		this.processKey();
 
-		e.preventDefault();
+		if (!e.ctrlKey) {
+			e.preventDefault();
+
+		}
 	}
 
 

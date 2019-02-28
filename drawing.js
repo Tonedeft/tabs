@@ -1,3 +1,5 @@
+// TODO: Get rid of "drawing.js" entirely
+
 function draw_grid(ctx, minor, major, stroke, fill) {
 	// Default variables that are not provided
 	minor = minor || 10;
