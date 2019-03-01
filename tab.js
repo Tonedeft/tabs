@@ -27,6 +27,11 @@ class Tab {
 			"mouse": {},
 		}
 
+		// Initialize Chord Dictionary
+		this.chordDictionary = {};
+		this.chordDictionary['A'] = [];
+		this.chordDictionary['A'].push(new Chord());
+
 		// Staff contains n measures split into 16 divisions (16th notes)
 		// Maybe each division is a "line" of "notesPerLine" notes with a duration, instead of an individual note having duration
 
@@ -166,6 +171,77 @@ class Tab {
 			this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].value = "x";
 
 			this.state.keys["x"] = false;
+		}
+
+		if (this.state.keys["A"] == true)
+		{
+			this.staves[this.current_position.staffIndex][0][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][1][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][2][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][3][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][4][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][5][this.current_position.x].value = "";
+			this.state.keys["A"] = false;
+		}
+		if (this.state.keys["B"] == true)
+		{
+			this.staves[this.current_position.staffIndex][0][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][1][this.current_position.x].value = "4";
+			this.staves[this.current_position.staffIndex][2][this.current_position.x].value = "4";
+			this.staves[this.current_position.staffIndex][3][this.current_position.x].value = "4";
+			this.staves[this.current_position.staffIndex][4][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][5][this.current_position.x].value = "";
+			this.state.keys["B"] = false;
+		}
+		if (this.state.keys["C"] == true)
+		{
+			this.staves[this.current_position.staffIndex][0][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][1][this.current_position.x].value = "1";
+			this.staves[this.current_position.staffIndex][2][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][3][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][4][this.current_position.x].value = "3";
+			this.staves[this.current_position.staffIndex][5][this.current_position.x].value = "";
+			this.state.keys["C"] = false;
+		}
+		if (this.state.keys["D"] == true)
+		{
+			this.staves[this.current_position.staffIndex][0][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][1][this.current_position.x].value = "3";
+			this.staves[this.current_position.staffIndex][2][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][3][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][4][this.current_position.x].value = "";
+			this.staves[this.current_position.staffIndex][5][this.current_position.x].value = "";
+			this.state.keys["D"] = false;
+		}
+		if (this.state.keys["E"] == true)
+		{
+			this.staves[this.current_position.staffIndex][0][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][1][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][2][this.current_position.x].value = "1";
+			this.staves[this.current_position.staffIndex][3][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][4][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][5][this.current_position.x].value = "0";
+			this.state.keys["E"] = false;
+		}
+		if (this.state.keys["F"] == true)
+		{
+			this.staves[this.current_position.staffIndex][0][this.current_position.x].value = "1";
+			this.staves[this.current_position.staffIndex][1][this.current_position.x].value = "1";
+			this.staves[this.current_position.staffIndex][2][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][3][this.current_position.x].value = "3";
+			this.staves[this.current_position.staffIndex][4][this.current_position.x].value = "3";
+			this.staves[this.current_position.staffIndex][5][this.current_position.x].value = "1";
+			this.state.keys["F"] = false;
+		}
+		if (this.state.keys["G"] == true)
+		{
+			this.staves[this.current_position.staffIndex][0][this.current_position.x].value = "3";
+			this.staves[this.current_position.staffIndex][1][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][2][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][3][this.current_position.x].value = "0";
+			this.staves[this.current_position.staffIndex][4][this.current_position.x].value = "2";
+			this.staves[this.current_position.staffIndex][5][this.current_position.x].value = "3";
+			this.state.keys["G"] = false;
 		}
 	}
 
