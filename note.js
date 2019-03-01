@@ -69,20 +69,21 @@ class Note {
 
 			// Above the staff, draw the note value (quarter, eighth, half, etc.)
 			ctx.beginPath();
-			ctx.ellipse(startingX+(cursorWidth+horizontalSpacing)*x+.5*cursorWidth, staffTop-lineSpacing, cursorWidth/2, cursorWidth/3, -Math.PI / 6, 0, 2 * Math.PI);
+			ctx.ellipse(startingX+(cursorWidth+horizontalSpacing)*x+.5*cursorWidth, staffTop-lineSpacing, cursorWidth*.45, cursorWidth*.30, -Math.PI / 6, 0, 2 * Math.PI);
 			
+			ctx.lineWidth = 1.5;
 			if (this.duration < 8) {
 				ctx.fill();
 			} else {
 				ctx.stroke();
 			}
 
-			if (this.duration <= 8) {
+			if (this.duration < 16) {
 				// Draw the line
 				ctx.beginPath();
-				ctx.moveTo(startingX+(cursorWidth+horizontalSpacing)*x+cursorWidth*.92,staffTop-lineSpacing-cursorWidth*.05);
-				ctx.lineTo(startingX+(cursorWidth+horizontalSpacing)*x+cursorWidth*.92,staffTop-lineSpacing*3);
-				ctx.lineWidth = 1;
+				ctx.lineWidth = 1.3;
+				ctx.moveTo(startingX+(cursorWidth+horizontalSpacing)*x+cursorWidth*.9,staffTop-lineSpacing-cursorWidth*.05);
+				ctx.lineTo(startingX+(cursorWidth+horizontalSpacing)*x+cursorWidth*.9,staffTop-lineSpacing*2.75);
 				ctx.stroke();
 			}
 

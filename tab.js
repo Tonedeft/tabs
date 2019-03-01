@@ -54,16 +54,28 @@ class Tab {
 		requestAnimationFrame(this.frame.bind(this));
 	}
 
-	processKey() {
+	processKey(e) {
 		// Move the cursor appropriately
 		if (this.state.keys["ArrowRight"] == true)
 		{
-			this.current_position.move(1,0);
+			if (e.shiftKey) {
+				if (this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].duration < 16) {
+					this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].duration += 1;
+				}
+			} else {
+				this.current_position.move(1,0);
+			}
 			this.state.keys["ArrowRight"] = false;
 		}
 		if (this.state.keys["ArrowLeft"] == true)
 		{
-			this.current_position.move(-1,0);
+			if (e.shiftKey) {
+				if (this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].duration >= 1) {
+					this.staves[this.current_position.staffIndex][this.current_position.y][this.current_position.x].duration -= 1;
+				}
+			} else {
+				this.current_position.move(-1,0);
+			}
 			this.state.keys["ArrowLeft"] = false;
 		}
 		if (this.state.keys["ArrowUp"] == true)
@@ -161,11 +173,10 @@ class Tab {
 		console.log(e);
 		this.state.keys[e.key] = true;
 
-		this.processKey();
+		this.processKey(e);
 
 		if (!e.ctrlKey) {
 			e.preventDefault();
-
 		}
 	}
 
