@@ -1,9 +1,9 @@
 class Note {
-	constructor(cursor, value) {
-		// TODO: staffIndex should be computed based on which measure we are on
+	constructor(cursor, value, duration) {
 		this.staffIndex = cursor.staffIndex;
 		this.x = cursor.x;
 		this.y = cursor.y;
+		this.duration = duration;
 		this.value = value;
 	}
 
@@ -12,7 +12,6 @@ class Note {
 		{
 			var options = options || {};
 			ctx.save();
-			// Draw 6 lines across the page
 
 			// Line spacing 
 			var lineSpacing = options.lineSpacing || 20;
@@ -54,13 +53,12 @@ class Note {
 			var textY = staffTop+y*lineSpacing + (textSize+lineSpacing)/2;
 
 			// Draw the background
+			// The actual drawing logic -----------------------------------------------------------------------
 			// Fill the smaller, real cursor location
 			ctx.beginPath();
 			ctx.fillStyle = backgroundColor;
 			ctx.rect(startingX+(cursorWidth+horizontalSpacing)*x, staffTop+y*lineSpacing, cursorWidth, lineSpacing); // left, top, width, height
-			//ctx.stroke();
 			ctx.fill();
-
 
 			// Write the value
 			ctx.fillStyle = textColor;
@@ -68,6 +66,25 @@ class Note {
 			ctx.font = textSize + "pt Arial";
 			ctx.fillText(this.value, textX, textY);
 
+
+			// Above the staff, draw the note value (quarter, eighth, half, etc.)
+			ctx.beginPath();
+			ctx.ellipse(startingX+(cursorWidth+horizontalSpacing)*x+.5*cursorWidth, staffTop-lineSpacing, cursorWidth/2, cursorWidth/3, -Math.PI / 6, 0, 2 * Math.PI);
+			
+			if (this.duration < 8) {
+				ctx.fill();
+			} else {
+				ctx.stroke();
+			}
+
+			if (this.duration <= 8) {
+				// Draw the line
+				ctx.beginPath();
+				ctx.moveTo(startingX+(cursorWidth+horizontalSpacing)*x+cursorWidth*.92,staffTop-lineSpacing-cursorWidth*.05);
+				ctx.lineTo(startingX+(cursorWidth+horizontalSpacing)*x+cursorWidth*.92,staffTop-lineSpacing*3);
+				ctx.lineWidth = 1;
+				ctx.stroke();
+			}
 
 			ctx.restore();
 		}

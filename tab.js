@@ -8,13 +8,15 @@ class Tab {
 		this.canvas.width = window.innerWidth*.9;
 		this.canvas.height = window.innerHeight*.9;
 
+		// Default to quarter note
+		this.duration = 4;
 
 		this.options = {};
 		this.options.linesPerStaff = 6;
 		this.options.startingX = 50;
 		this.options.lineSpacing = 20;
 		this.options.horizontalSpacing = 10;
-		this.options.staffSpacing = 40;
+		this.options.staffSpacing = 80;
 		this.options.linesPerStaff = 6;
 		this.options.notesPerLine = 32 + 3; // 4 measures of eighth notes + 3 bars
 
@@ -26,6 +28,7 @@ class Tab {
 		}
 
 		// Staff contains n measures split into 16 divisions (16th notes)
+		// Maybe each division is a "line" of "notesPerLine" notes with a duration, instead of an individual note having duration
 
 		// Grid of notes: staff index, x (horizontal), y (which string, 0-5)
 		// We default to 1 staff (that wraps around)
@@ -34,9 +37,9 @@ class Tab {
 			this.staves.push([]);
 			for (var string = 0; string < 6; ++string) {
 				this.staves[staff].push([]);
-				for (var x = 0; x < 50; ++x) { // TODO: How to keep track of max horizontal location?
+				for (var x = 0; x < 250; ++x) { // TODO: How to keep track of max horizontal location?
 					// TODO: This creates a bunch of objects that may be empty, there's a better way I think
-					this.staves[staff][string].push(new Note({staffIndex:staff, x:x, y:string}, ""));
+					this.staves[staff][string].push(new Note({staffIndex:staff, x:x, y:string}, "", this.duration));
 				}
 			}
 		}
@@ -187,8 +190,6 @@ class Tab {
 		this.state.mouse.clientY = e.clientY;
 
 		this.mouse_position.updateWithPosition(e.clientX, e.clientY, this.options);
-
-		//console.log(e);
 	}
 
 	frame(timestamp) {
@@ -220,7 +221,6 @@ class Tab {
 
 		// Draw the staves
 		draw_tab(this.c,  this.options);
-
 
 		// Draw the notes on the staff (3 dimensional for loop, can this be cleaner?)
 		this.staves.forEach((staff) => {
